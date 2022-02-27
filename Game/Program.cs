@@ -34,8 +34,6 @@ namespace Game
                     avatar.Fire();
                 }
             }
-
-            Console.ReadLine();
         }
     }
 }

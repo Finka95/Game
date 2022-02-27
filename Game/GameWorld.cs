@@ -5,6 +5,7 @@ namespace Game
 {
     static class GameWorld
     {
+        private static int count = default;
         private static Timer timer;
         private static double interval = 1000;
         public static Enemy[] enemies = new Enemy[40];
@@ -17,9 +18,9 @@ namespace Game
         public static void SetLevel(int level = 1)
         {
             enemy = enemy_CharArray[level];
-            //timer = new Timer(interval * level);
-            //timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
-            //timer.Enabled = true;
+            timer = new Timer(interval * level);
+            timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
+            timer.Enabled = true;
             UpdateWorld(enemiesCorner);
         }
 
@@ -48,7 +49,26 @@ namespace Game
 
         private static void Timer_Elapsed(object sender, ElapsedEventArgs e)
         {
-            UpdateWorld(new Position(enemiesCorner.X + 2, enemiesCorner.Y));
+            int num = 2;
+            if(count == 10)
+            {
+                num *= -1;
+                count = default;
+            }
+            UpdateWorld(new Position(enemiesCorner.X + num, enemiesCorner.Y));
+            count++;
+
+        }
+
+        public static bool CheckEnemy(Position pos)
+        {
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                if(enemies[i].position.X == pos.X && enemies[i].position.Y == pos.Y)
+                    return true;
+            }
+
+            return false;
         }
     }
 

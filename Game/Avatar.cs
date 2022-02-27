@@ -11,9 +11,6 @@ namespace Game
         public List<Rocket> rockets;
         //private event KeyDown;
 
-        public Rocket rocket;
-
-
         public Avatar(Position pos)
         {
             position = pos;
@@ -53,9 +50,9 @@ namespace Game
             rockets.Add(new Rocket(this));
         }
 
-        public void Hit()
+        public void Hit(Rocket rocket)
         {
-
+            rockets.Remove(rocket);
         }
     }
 
@@ -67,6 +64,8 @@ namespace Game
         public char rocket { get; private set; }
         public Position position { get; private set; }
 
+        private Avatar dadAvatar;
+
         public Rocket(Avatar ava, int lvl = 1)
         {
             speed = 200 / lvl;
@@ -75,6 +74,7 @@ namespace Game
             timer.Elapsed += new ElapsedEventHandler(Timer_Elapsed);
             timer.Enabled = true;
             position = ava.position + new Position(0, -1);
+            dadAvatar = ava;
             Show();
         }
 
@@ -83,6 +83,8 @@ namespace Game
             Console.SetCursorPosition(position.X, position.Y);
             Console.Write(' ');
             position = new Position(position.X, position.Y - 1);
+            if(GameWorld.CheckEnemy(position))
+                dadAvatar.Hit(this);
             Show();
         }
 
